@@ -12,5 +12,24 @@ package server;
  *
  */
 public class Router {
+    public static RouteResult route(String requestLine) {
+        if(requestLine == null) {
+            return new RouteResult("notfound", "GET");
+        }
+        
+        if(requestLine.startsWith("GET / ")) {
+            return new RouteResult("index", "GET");
+        }
+        
+        if(requestLine.startsWith("GET /notes")) {
+            return new RouteResult("notes", "GET");
+        }
+        
+        if(requestLine.startsWith("POST /notes")) {
+            return new RouteResult("notes", "POST");
+        }
+        
+        return new RouteResult("notfound", "GET");
+    }
 
 }
