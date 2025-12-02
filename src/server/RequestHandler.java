@@ -26,12 +26,15 @@ public class RequestHandler implements Runnable {
             String requestLine = reader.readLine();
             System.out.println("Request: " + requestLine);
 
-            // シンプルなレスポンス
-            String response = "HTTP/1.1 200 OK\r\n"
-                    + "Content-Type: text/plain\r\n"
-                    + "Content-Length: 11\r\n"
-                    + "\r\n"
-                    + "Hello World";
+            String body = "Hello World OK";
+
+            String response =
+                "HTTP/1.1 200 OK\r\n"
+              + "Content-Type: text/plain\r\n"
+              + "Content-Length: 11\r\n"
+              + "\r\n"
+              + "Hello World";
+
 
             writer.write(response);
             writer.flush();
