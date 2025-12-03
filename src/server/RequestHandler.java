@@ -3,12 +3,17 @@ package server;
 import java.io.*;
 import java.net.Socket;
 
+import repository.NoteRepository;
+import model.Note;
+
 public class RequestHandler implements Runnable {
 
     private Socket socket;
+    private NoteRepository repository;
 
-    public RequestHandler(Socket socket) {
+    public RequestHandler(Socket socket, NoteRepository repository) {
         this.socket = socket;
+        this.repository = repository;
     }
 
     @Override
@@ -36,7 +41,16 @@ public class RequestHandler implements Runnable {
             }
             
             else if(route.target.equals("notes") && route.method.equals("GET")) {
-                body = "メモ一覧（仮表示）";
+                var list = repository.findAll();
+                
+                StringBuilder sb = new StringBuilder();
+                sb.append("【メモ一覧】\n");
+                
+                for(Note n : list) {
+                    sb.append(n.getNoteId() + ":" + n.getText() + "\n");
+                }
+                body = sb.toString();
+
             }
             
             else if(route.target.equals("notes") && route.method.equals("POST")) {
@@ -55,6 +69,8 @@ public class RequestHandler implements Runnable {
                 String requestBody = new String(buf);
                 
                 System.out.println("POST body = " + requestBody);
+                
+                repository.add(requestBody);
                 
                 body = "メモ追加（受け取ったデータ）: " + requestBody;
             }

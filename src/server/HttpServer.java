@@ -11,6 +11,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
 
+import repository.NoteRepository;
+
 /**
  *@author 23238183 佐藤樹
  *
@@ -18,9 +20,11 @@ import java.io.IOException;
 public class HttpServer {
     
     private int port;
+    private NoteRepository repository;
     
     public HttpServer(int port) {
         this.port = port;
+        this.repository = new NoteRepository();
     }
     
     public void start() {
@@ -29,7 +33,7 @@ public class HttpServer {
             
             while(true) {
                 Socket socket = serverSocket.accept();
-                new Thread(new RequestHandler(socket)).start();
+                new Thread(new RequestHandler(socket, repository)).start();
             }
             
         } catch (IOException e) {
